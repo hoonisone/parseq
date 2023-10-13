@@ -19,7 +19,7 @@ import math
 import os
 import shutil
 from pathlib import Path
-
+import torch
 from omegaconf import DictConfig, open_dict
 import hydra
 from hydra.core.hydra_config import HydraConfig
@@ -30,7 +30,10 @@ from pytorch_lightning import Trainer, LightningModule
 from pytorch_lightning.loggers import TensorBoardLogger
 
 from ray import tune
-from ray.tune import CLIReporter
+# ray는 분산 처리를 지원하는 모듈로 multiprocessing 모듈과 기능이 같다.
+# tune은 분산 환경에서 모델의 하이퍼 파라미터를 조절하는 표준 도구
+from ray.tune import CLIReporter # CLI(command line interface) 
+
 from ray.tune.integration.pytorch_lightning import TuneReportCheckpointCallback
 from ray.tune.ray_trial_executor import RayTrialExecutor
 from ray.tune.schedulers import MedianStoppingRule
@@ -110,7 +113,9 @@ def train(hparams, config, checkpoint_dir=None):
         config.model.lr = hparams['lr']
         # config.model.weight_decay = hparams['wd']
 
-    model: BaseSystem = hydra.utils.instantiate(config.model)
+    # model: BaseSystem = hydra.utils.instantiate(config.model)
+    model: BaseSystem = torch.hub.load('baudm/parseq', 'parseq', pretrained=True).train()
+    # print("charset", model.charset_test)
     datamodule: SceneTextDataModule = hydra.utils.instantiate(config.data)
 
     tune_callback = TuneReportCheckpointPruneCallback({
@@ -125,8 +130,11 @@ def train(hparams, config, checkpoint_dir=None):
                                                callbacks=[tune_callback])
     trainer.fit(model, datamodule=datamodule, ckpt_path=ckpt_path)
 
-
 @hydra.main(config_path='configs', config_name='tune', version_base='1.2')
+# hydra는 프로그램이 커지는 경우 여러 설정을 파일로 따로 보관하고 관리하는 방식을 취함
+# 실제 사용할 때는 @hydra.main() 사용
+# 원하는 파일에 프로그램 파라미터를 모두 넣어놓고 파일 이름을 통해 통째로 가져옴
+# 매 실행 마다 직접 입력할 필요 없음
 def main(config: DictConfig):
     # Special handling for PARseq
     if config.model.get('perm_mirrored', False):
@@ -143,7 +151,6 @@ def main(config: DictConfig):
         'lr': tune.loguniform(config.tune.lr.min, config.tune.lr.max),
         # 'wd': tune.loguniform(config.tune.wd.min, config.tune.wd.max),
     }
-
     steps_per_epoch = len(hydra.utils.instantiate(config.data).train_dataloader())
     val_steps = steps_per_epoch * config.trainer.max_epochs / config.trainer.val_check_interval
     max_t = round(0.75 * val_steps)
@@ -156,30 +163,30 @@ def main(config: DictConfig):
     stop = np.log10(lr.upper)
     num = math.ceil(stop - start) + 1
     initial_points = [{'lr': np.clip(x, lr.lower, lr.upper).item()} for x in reversed(np.logspace(start, stop, num))]
-    search_alg = AxSearch(points_to_evaluate=initial_points)
+    search_alg = AxSearch(points_to_evaluate=initial_points) 
 
     reporter = CLIReporter(
         parameter_columns=['lr'],
         metric_columns=['loss', 'accuracy', 'training_iteration'])
 
     out_dir = Path(HydraConfig.get().runtime.output_dir if config.tune.resume_dir is None else config.tune.resume_dir)
-
     analysis = tune.run(
         tune.with_parameters(train, config=config),
         name=out_dir.name,
         metric='NED',
         mode='max',
         stop=MetricTracker('NED', max_t),
-        config=hparams,
+        config=hparams, # 튜닝 될 하이퍼파라미터 검색 범위 정보
+        
         resources_per_trial={
-            'cpu': 1,
+            'cpu': config.tune.cpus_per_trial,
             'gpu': config.tune.gpus_per_trial
         },
-        num_samples=config.tune.num_samples,
-        local_dir=str(out_dir.parent.absolute()),
+        num_samples=config.tune.num_samples, # 하이퍼파라미터 공간을 몇 번 탐색할 지
+        local_dir=str(out_dir.parent.absolute()), # 결과 저장 위치 (모델 보단, 파라미터 조합 별 성능 기록을 말하는 듯)
         search_alg=search_alg,
-        scheduler=scheduler,
-        progress_reporter=reporter,
+        scheduler=scheduler, # 학습률을 어떻게 조절할지 결정
+        progress_reporter=reporter, # 진행 상황을 어떻게 출력할 지 (CLI? FILE?)
         resume=config.tune.resume_dir is not None,
         trial_executor=RayTrialExecutor(result_buffer_length=0)  # disable result buffering
     )

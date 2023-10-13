@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import re
+import re # regular expression
 from abc import ABC, abstractmethod
 from itertools import groupby
 from typing import List, Optional, Tuple
@@ -25,20 +25,42 @@ from torch.nn.utils.rnn import pad_sequence
 
 class CharsetAdapter:
     """Transforms labels according to the target charset."""
+    """
+    label(사실 임의의 문자열)에 대해 사용하기로 한 문자 외의 것들을 모두 제거해주는 객체
+    당연히 대상 문자열을 주어야 하고, 대문자만 쓰는지 소문자만 쓰는지고 검사를 해서
+    예로 소문자만 쓰는 경우 검사 결과 문자열을 먼저 소문자로 바꾼 뒤 검사해줌
+    한글만 사용한다면 큰 의미는 없을 듯
+    사용방법은 객체를 직접 호출하는 방식 => 객체.(문자열)
+    대상이 아닌 문자열을 모두 제거한 깨끗한 문자열 반환
+    """
 
     def __init__(self, target_charset) -> None:
+        # an example of target_charset => "0123456789abcdefghijklmnopqrstuvwxyz"
         super().__init__()
-        self.lowercase_only = target_charset == target_charset.lower()
+        self.lowercase_only = target_charset == target_charset.lower() 
+        # 혹시 대상 문자열이 모두 소문자이면 소문자 전용이라 생각
+        # 추후 검사 대상 문자열을 모두 소문자로 바꾸기 위함
         self.uppercase_only = target_charset == target_charset.upper()
+        # 이것도 마찬가지로 모두 대문자만 사용하는지 검사
         self.unsupported = re.compile(f'[^{re.escape(target_charset)}]')
+        # self.unsupported는 어떤 문자에 대해 지원되지 않는지 여부를 알기 위핸 re 객체
+        # self.unsupported(문자열)을 넣었을 때 문자열 중 지원되지 않는 문자를 찾을 수 있다.
+        # 정확한 것은 re의 사용법을 알아야 하겠다. 
+        # 일단 [^abc] 라는 정규표현식은 abc 셋 중 하나로 시작하지 않는 문자를 말한다.
+        # 그리고 한글자를 의미하기 때문에 글자 단위로 적용된다.
 
     def __call__(self, label):
+        # 객체에 괄호 치고 인자 넘기며 함수취급했을 때 호출되는 함수
+        # ex) 인스턴스(x, y,... )
         if self.lowercase_only:
             label = label.lower()
         elif self.uppercase_only:
             label = label.upper()
         # Remove unsupported characters
         label = self.unsupported.sub('', label)
+        # label에서 제거 대상(unsupported에 검사에서 true가 나오는 것)을 ""로 바꾼다.
+        # 즉 지운다. 그 후 결과를 반환
+        # 결과적으로 대상이 아닌 문자는 모두 제거 
         return label
 
 

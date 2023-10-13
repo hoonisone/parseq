@@ -1,0 +1,5 @@
+configs.experiment는 저자가 수행해놓은 pretrained 정보인 듯 하다.
+checkpoint 에 pretreined=parseq-tyni 식으로 전달하면 되는 것 같다.
+
+각 실험에 대한 설정은 프로젝트에 포함되지만
+가중치는 로딩해서 사용하는 식으로 작성. 다운 url은 코드 내에 있음

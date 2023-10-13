@@ -6,8 +6,9 @@ trainer:
   devices: 1  # tuning with DDP is not yet supported.
 
 tune:
-  num_samples: 10
+  num_samples: 10 # ray.tune을 이용한 하이퍼 파리미터 탐색 횟수
   gpus_per_trial: 1
+  cpus_per_trial: 1
   lr:
     min: 1e-4
     max: 2e-3
