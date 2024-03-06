@@ -120,7 +120,6 @@ def main():
     # dict1.update(dict2) => dict2에 있는 쌍들에 대해 dict1에 이미 있는 것은 값을 덮어 씌우고 없는 경우 추가한다. (덧셈 느낌?)
 
     print(f'Additional keyword arguments: {kwargs}')
-
     model = load_from_checkpoint(args.checkpoint, **kwargs).eval().to(args.device)
     # model에는 checkpoint 내에 있는 정보에 기반하여 로딩된 모델이 담김
     # model 클래스와 가중치 정보가 checkpoint 경로에 있는 yaml파일에 있음
@@ -136,6 +135,9 @@ def main():
     test_set = sorted(set(test_set)) # 중복이 있을 수 있어 set으로 ..
     results = {}
     max_width = max(map(len, test_set))
+    
+
+    # 테스트 단계
     for name, dataloader in datamodule.test_dataloaders(test_set).items():
         total = 0
         correct = 0
@@ -154,7 +156,8 @@ def main():
         mean_conf = 100 * confidence / total
         mean_label_length = label_length / total
         results[name] = Result(name, total, accuracy, mean_ned, mean_conf, mean_label_length)
-
+    
+    # 결과 출력
     result_groups = {
         'Benchmark (Subset)': SceneTextDataModule.TEST_BENCHMARK_SUB,
         'Benchmark': SceneTextDataModule.TEST_BENCHMARK

@@ -1,6 +1,6 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
 
-aiohttp==3.8.5
+aiohttp==3.8.6
     # via fsspec
 aiosignal==1.3.1
     # via
@@ -10,7 +10,7 @@ antlr4-python3-runtime==4.9.3
     # via
     #   hydra-core
     #   omegaconf
-asttokens==2.2.1
+asttokens==2.4.0
     # via stack-data
 async-timeout==4.0.3
     # via aiohttp
@@ -28,7 +28,7 @@ botorch==0.9.2
     # via ax-platform
 certifi==2023.7.22
     # via requests
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
     # via
     #   aiohttp
     #   requests
@@ -38,29 +38,31 @@ click==8.0.4
     #   ray
 comm==0.1.4
     # via ipywidgets
-contourpy==1.1.0
+contourpy==1.1.1
     # via matplotlib
-cycler==0.11.0
+cycler==0.12.1
     # via matplotlib
 decorator==5.1.1
     # via ipython
 distlib==0.3.7
     # via virtualenv
-executing==1.2.0
+exceptiongroup==1.1.3
+    # via ipython
+executing==2.0.0
     # via stack-data
-filelock==3.12.2
+filelock==3.12.4
     # via
     #   huggingface-hub
     #   ray
     #   virtualenv
-fonttools==4.42.1
+fonttools==4.43.1
     # via matplotlib
 frozenlist==1.4.0
     # via
     #   aiohttp
     #   aiosignal
     #   ray
-fsspec==2023.6.0
+fsspec==2023.9.2
     # via
     #   huggingface-hub
     #   pytorch-lightning
@@ -70,7 +72,7 @@ gpytorch==1.11
     # via botorch
 grpcio==1.43.0
     # via ray
-huggingface-hub==0.16.4
+huggingface-hub==0.18.0
     # via timm
 hydra-core==1.3.2
     # via
@@ -81,7 +83,7 @@ idna==3.4
     # via
     #   requests
     #   yarl
-imageio==2.31.1
+imageio==2.31.5
     # via
     #   imgaug
     #   scikit-image
@@ -89,17 +91,15 @@ imgaug==0.4.0
     # via
     #   -r requirements/train.in
     #   -r requirements/tune.in
-importlib-resources==6.0.1
-    # via matplotlib
 iopath==0.1.10
     # via fvcore
-ipython==8.14.0
+ipython==8.16.1
     # via ipywidgets
-ipywidgets==8.1.0
+ipywidgets==8.1.1
     # via ax-platform
-jaxtyping==0.2.21
+jaxtyping==0.2.23
     # via linear-operator
-jedi==0.19.0
+jedi==0.19.1
     # via ipython
 jinja2==3.1.2
     # via ax-platform
@@ -107,13 +107,13 @@ joblib==1.3.2
     # via
     #   nltk
     #   scikit-learn
-jsonschema==4.19.0
+jsonschema==4.19.1
     # via ray
 jsonschema-specifications==2023.7.1
     # via jsonschema
-jupyterlab-widgets==3.0.8
+jupyterlab-widgets==3.0.9
     # via ipywidgets
-kiwisolver==1.4.4
+kiwisolver==1.4.5
     # via matplotlib
 lazy-loader==0.3
     # via scikit-image
@@ -132,11 +132,11 @@ lmdb==1.4.1
     #   -r requirements/tune.in
 markupsafe==2.1.3
     # via jinja2
-matplotlib==3.7.2
+matplotlib==3.8.0
     # via imgaug
 matplotlib-inline==0.1.6
     # via ipython
-msgpack==1.0.5
+msgpack==1.0.7
     # via ray
 multidict==6.0.4
     # via
@@ -148,7 +148,7 @@ networkx==3.1
     # via scikit-image
 nltk==3.8.1
     # via -r requirements/core.in
-numpy==1.25.2
+numpy==1.26.1
     # via
     #   contourpy
     #   fvcore
@@ -161,7 +161,6 @@ numpy==1.25.2
     #   pandas
     #   pyro-ppl
     #   pytorch-lightning
-    #   pywavelets
     #   ray
     #   scikit-image
     #   scikit-learn
@@ -173,11 +172,11 @@ numpy==1.25.2
     #   torchvision
 omegaconf==2.3.0
     # via hydra-core
-opencv-python==4.8.0.76
+opencv-python==4.8.1.78
     # via imgaug
 opt-einsum==3.3.0
     # via pyro-ppl
-packaging==23.1
+packaging==23.2
     # via
     #   huggingface-hub
     #   hydra-core
@@ -187,8 +186,7 @@ packaging==23.1
     #   pytorch-lightning
     #   scikit-image
     #   tensorboardx
-    #   torchmetrics
-pandas==2.0.3
+pandas==2.1.1
     # via
     #   ax-platform
     #   ray
@@ -198,7 +196,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pillow==10.0.0
+pillow==10.0.1
     # via
     #   -r requirements/test.in
     #   -r requirements/train.in
@@ -209,11 +207,11 @@ pillow==10.0.0
     #   matplotlib
     #   scikit-image
     #   torchvision
-platformdirs==3.10.0
+platformdirs==3.11.0
     # via virtualenv
-plotly==5.16.1
+plotly==5.17.0
     # via ax-platform
-portalocker==2.7.0
+portalocker==2.8.2
     # via iopath
 prompt-toolkit==3.0.39
     # via ipython
@@ -227,7 +225,7 @@ pure-eval==0.2.2
     # via stack-data
 pygments==2.16.1
     # via ipython
-pyparsing==3.0.9
+pyparsing==3.1.1
     # via matplotlib
 pyro-api==0.1.2
     # via pyro-ppl
@@ -239,10 +237,8 @@ python-dateutil==2.8.2
     #   pandas
 pytorch-lightning==1.9.5
     # via -r requirements/core.in
-pytz==2023.3
+pytz==2023.3.post1
     # via pandas
-pywavelets==1.4.1
-    # via scikit-image
 pyyaml==6.0.1
     # via
     #   -r requirements/core.in
@@ -259,7 +255,7 @@ referencing==0.30.2
     # via
     #   jsonschema
     #   jsonschema-specifications
-regex==2023.8.8
+regex==2023.10.3
     # via nltk
 requests==2.31.0
     # via
@@ -267,19 +263,19 @@ requests==2.31.0
     #   huggingface-hub
     #   ray
     #   torchvision
-rpds-py==0.9.2
+rpds-py==0.10.6
     # via
     #   jsonschema
     #   referencing
-safetensors==0.3.2
+safetensors==0.4.0
     # via timm
-scikit-image==0.21.0
+scikit-image==0.22.0
     # via imgaug
-scikit-learn==1.3.0
+scikit-learn==1.3.1
     # via
     #   ax-platform
     #   gpytorch
-scipy==1.11.2
+scipy==1.11.3
     # via
     #   ax-platform
     #   botorch
@@ -287,7 +283,7 @@ scipy==1.11.2
     #   linear-operator
     #   scikit-image
     #   scikit-learn
-shapely==2.0.1
+shapely==2.0.2
     # via imgaug
 six==1.16.0
     # via
@@ -295,7 +291,7 @@ six==1.16.0
     #   grpcio
     #   imgaug
     #   python-dateutil
-stack-data==0.6.2
+stack-data==0.6.3
     # via ipython
 tabulate==0.9.0
     # via
@@ -311,9 +307,9 @@ termcolor==2.3.0
     # via fvcore
 threadpoolctl==3.2.0
     # via scikit-learn
-tifffile==2023.8.12
+tifffile==2023.9.26
     # via scikit-image
-timm==0.9.5
+timm==0.9.7
     # via -r requirements/core.in
 torch==1.13.1+cpu
     # via
@@ -325,7 +321,7 @@ torch==1.13.1+cpu
     #   timm
     #   torchmetrics
     #   torchvision
-torchmetrics==1.0.3
+torchmetrics==1.2.0
     # via pytorch-lightning
 torchvision==0.14.1+cpu
     # via
@@ -340,7 +336,7 @@ tqdm==4.66.1
     #   nltk
     #   pyro-ppl
     #   pytorch-lightning
-traitlets==5.9.0
+traitlets==5.11.2
     # via
     #   comm
     #   ipython
@@ -351,11 +347,10 @@ typeguard==2.13.3
     #   ax-platform
     #   jaxtyping
     #   linear-operator
-typing-extensions==4.7.1
+typing-extensions==4.8.0
     # via
     #   huggingface-hub
     #   iopath
-    #   ipython
     #   jaxtyping
     #   lightning-utilities
     #   pytorch-lightning
@@ -363,17 +358,15 @@ typing-extensions==4.7.1
     #   torchvision
 tzdata==2023.3
     # via pandas
-urllib3==2.0.4
+urllib3==2.0.6
     # via requests
-virtualenv==20.24.3
+virtualenv==20.24.5
     # via ray
-wcwidth==0.2.6
+wcwidth==0.2.8
     # via prompt-toolkit
-widgetsnbextension==4.0.8
+widgetsnbextension==4.0.9
     # via ipywidgets
 yacs==0.1.8
     # via fvcore
 yarl==1.9.2
     # via aiohttp
-zipp==3.16.2
-    # via importlib-resources
